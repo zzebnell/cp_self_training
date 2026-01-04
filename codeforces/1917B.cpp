@@ -1,6 +1,6 @@
 /*
   user: zebnel
-  created: 2025-09-25 10:33:53
+  created: 2026-01-03 20:18:35
 */
 
 #include <bits/stdc++.h>
@@ -11,25 +11,6 @@ using ll = long long;
 
 const int INF = 1e9 + 7;
 const double EPS = 1e-9;
-
-void dp(map<string, ll>& mp, string s) {
-  if (s.empty()) {
-    return;
-  }
-  if (mp.count(s)) {
-    return;
-  }
-  mp[s]++;
-  char c = s.back();
-  s.pop_back();
-  dp(mp, s);
-  if (s.empty()) {
-    return;
-  }
-  s.pop_back();
-  s.push_back(c);
-  dp(mp, s);
-}
 
 int main() {
   ios::sync_with_stdio(0);
@@ -42,10 +23,22 @@ int main() {
     cin >> n;
     string s;
     cin >> s;
-    map<string, ll> mp;
-    dp(mp, s);
-    cout << mp.size() << '\n';
+    vector<vector<int>> pos(27);
+    for (int i = 0; i < n; i++) {
+      pos[s[i] - 'a'].push_back(i);
+    }
+    ll ans = 0;
+    for (int i = 0; i < n; i++) {
+      auto it = upper_bound(pos[s[i] - 'a'].begin(), pos[s[i] - 'a'].end(), i);
+      if (it == pos[s[i] - 'a'].end()) {
+        ans += n - i;
+      } else {
+        ans += *it - i;
+      }
+    }
+    cout << ans << '\n';
   }
 
   return 0;
 }
+
